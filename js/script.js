@@ -83,6 +83,10 @@ function startGame() {
     // [4] in base al livello scelto dall'utente genero una griglia quadrata, cui ogni cella contiene un numero compreso nel range del livello
     generateGrid();
 
+    /******************** 
+    *   DOM FUNCTIONS   *
+    *********************/
+    // FUNZIONE PER GENERARE LA GRIGLIA
     function generateGrid() {
         //dare una classe alla griglia che decide le dimensioni delle celle
         mainGrid.classList.add(mainGridClass);
@@ -92,12 +96,44 @@ function startGame() {
             const newCell = document.createElement('div');
             newCell.innerHTML = `<span>${i}</span>`;
             newCell.classList.add('square');
+
+            // aggiungere cosa succede al click
+            newCell.addEventListener('click', manageCellClick);
     
-            //aggiungere un testo
+            //aggiungo un testo e una classe che fa cambiare colore alle celle
             mainGrid.append(newCell);
-            //aggiugere una classe etc
         }
+    }
+
+    const userNumbers = [];
+    let userMessage = document.getElementById('user-message');
+        
+    // FUNZIONE PER CAMBIARE COLORE ALLE CELLE
+    function manageCellClick() {
     
+        // [1] l'utente clicca su una cella    
+        let userNumber = parseInt(this.querySelector('span').innerHTML);
+
+        // [2.1] SE il numero è presente in quelli generati casualmente (è una bomba) -> la casella si colora di rosso -> l'utente perde -> faccio finire il gioco + comunico all'utente il punteggio
+        if(bombs.includes(userNumber)) {
+            this.classList.add('red');
+            userMessage.innerHTML = `hai perso!! sei finito su una bomba! :( i tuoi tentativi sono stati: ${userNumbers}`; 
+        } else {
+            // SE (il numero non è presente in quelli già dati dall'utente) lo pusho nell'array userNumbers
+            if (!userNumbers.includes(userNumber)) {
+                userNumbers.push(userNumber);
+                this.classList.add('blue');
+
+            }
+            console.log(userNumbers);
+    
+            // SE l'utente ha raggiunto il numero massimo di tentativi possibili -> l'utente vince -> faccio finire il gioco + gli comunico che ha vinto + punteggio
+            if (userNumbers.length === maxAttempts) {
+                userMessage.innerHTML = `hai vinto!! hai scansato tutte le bombe! i tuoi tentativi sono stati: ${userNumbers}`
+            }
+        }
+
+        this.style.pointerEvents = 'none';
     }
 }
 

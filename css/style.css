@@ -61,6 +61,9 @@ main {
 
 .square {
     border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #main-grid.easy .square {
@@ -76,4 +79,14 @@ main {
 #main-grid.crazy .square {
     width: calc(100% / 7);
     height: calc(100% / 7);
+}
+
+.square.blue
+{
+    background-color: lightseagreen;
+}
+
+.square.red
+{
+    background-color: lightcoral;
 }
